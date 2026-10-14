@@ -1,0 +1,184 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Peta Regulasi Diri</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+/* Layout: pohon horizontal dari kiri ke kanan (akar, kelompok, konsep, turunan); panel teks tetap di bawah peta. */
+:root{
+  --bg:#eef2f4; --surface:#ffffff; --fg:#14262e; --muted:#566a73; --line:#b6c4ca;
+  --c1:#0f766e; --c1s:#d6efec;   /* Pondasi */
+  --c2:#b45309; --c2s:#fbe9d0;   /* Implementasi */
+  --c3:#7c3a9e; --c3s:#eddff6;   /* Hubungan */
+  --root:#14262e; --rootfg:#ffffff;
+  --font-d:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --font-b:"Source Sans 3","Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1a20; --surface:#16262e; --fg:#e6eef1; --muted:#9bb0b8; --line:#3a505a;
+  --c1:#4fd1c5; --c1s:#12403c; --c2:#f6ad55; --c2s:#4a3014; --c3:#d6a8f0; --c3s:#3c2450;
+  --root:#e6eef1; --rootfg:#0e1a20; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1a20; --surface:#16262e; --fg:#e6eef1; --muted:#9bb0b8; --line:#3a505a;
+  --c1:#4fd1c5; --c1s:#12403c; --c2:#f6ad55; --c2s:#4a3014; --c3:#d6a8f0; --c3s:#3c2450;
+  --root:#e6eef1; --rootfg:#0e1a20; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-b);font-size:16px;line-height:1.55;padding-inline:16px;padding-block:20px 32px}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+h1{font-family:var(--font-d);font-size:1.6rem;line-height:1.15;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;font-size:.95rem}
+.prog{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:8px}
+.bar{width:110px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--c1);transition:width .3s}
+.mapbox{background:var(--surface);border-radius:14px;padding:16px;overflow-x:auto;border:1px solid var(--line)}
+#map{position:relative;margin:0 auto}
+#map svg{position:absolute;inset:0;pointer-events:none}
+#map path{fill:none;stroke:var(--line);stroke-width:2;transition:stroke .2s}
+#map path.on{stroke-width:3}
+.node{position:absolute;box-sizing:border-box;font-family:var(--font-d);font-weight:500;font-size:.95rem;line-height:1.2;text-align:left;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:2px solid var(--col);background:var(--soft);color:var(--fg);cursor:pointer;transition:transform .15s,background .15s,color .15s}
+.node:hover{transform:translateY(-2px)}
+.node:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.node .dot{flex:none;width:9px;height:9px;border-radius:50%;border:2px solid var(--col);background:transparent}
+.node.seen .dot{background:var(--col)}
+.node.active{background:var(--col);color:var(--surface)}
+.node.active .dot{background:var(--surface);border-color:var(--surface)}
+.node small{display:block;font-family:var(--font-b);font-weight:400;font-size:.75rem;opacity:.85}
+.node.root{cursor:default;background:var(--root);color:var(--rootfg);border-color:var(--root);font-weight:700;font-size:1.05rem;transform:none}
+.node.group{cursor:default;transform:none;background:var(--col);color:var(--surface);border-color:var(--col);font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;justify-content:center;text-align:center}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;min-height:150px;border-left:8px solid var(--col,var(--line))}
+.tag{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--col,var(--muted))}
+.panel h2{font-family:var(--font-d);font-size:1.35rem;margin:2px 0 8px;line-height:1.2}
+.panel p{margin:0;max-width:68ch}
+.ex{margin-top:14px;padding:10px 14px;border-radius:8px;background:var(--soft,var(--bg));max-width:68ch}
+.ex b{display:block;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--col)}
+.hint{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:560px){h1{font-size:1.35rem}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Peta Regulasi Diri Pendidik PNF</h1>
+      <p class="sub">Klik setiap konsep untuk membaca penjelasan dan contohnya.</p>
+    </div>
+    <div class="prog"><span id="pt">0 dari 11 dibuka</span><span class="bar"><i id="pb"></i></span></div>
+  </header>
+  <div class="mapbox"><div id="map" role="group" aria-label="Peta konsep regulasi diri"></div></div>
+  <section class="panel" id="panel" aria-live="polite"></section>
+</div>
+
+<script>
+var G={
+ p:{n:"Pondasi",c:"c1"}, i:{n:"Implementasi",c:"c2"}, h:{n:"Hubungan untuk Belajar",c:"c3"}
+};
+var TREE={label:"Regulasi Diri Pendidik PNF",root:true,kids:[
+ {group:"p",label:"Pondasi",kids:[
+  {id:"rd",label:"Regulasi Diri",sub:"Baumeister",
+   t:"Regulasi diri adalah kemampuan mengatur pikiran, perasaan, dan tindakan agar sesuai tujuan. Ada empat komponen yang saling menopang: Standar, Motivasi, Pemantauan, dan Energi Mental.",
+   kids:[
+    {id:"st",label:"Standar",t:"Tujuan atau patokan yang ingin dicapai. Tanpa standar yang jelas, kita tidak tahu kapan harus mengoreksi diri.",
+     ex:"\"Saya menyapa murid yang terlambat dengan hangat, bukan menegur di depan kelas.\""},
+    {id:"mo",label:"Motivasi",t:"Dorongan untuk tetap berusaha memenuhi standar, terutama saat lelah atau kecewa.",
+     ex:"Mengingat kembali alasan Anda menjadi pendidik PNF sebelum bereaksi."},
+    {id:"pm",label:"Pemantauan",t:"Kesadaran terhadap pikiran, emosi, dan tindakan diri sendiri ketika sedang berlangsung.",
+     ex:"Menyadari nada suara mulai meninggi, lalu berhenti sejenak dan menurunkannya."},
+    {id:"em",label:"Energi Mental",t:"Tenaga psikologis yang menopang tiga komponen lainnya. Energi ini bisa menipis setelah lama menahan diri dan mengambil banyak keputusan.",
+     ex:"Menjadwalkan jeda singkat di antara dua kelompok belajar.",
+     kids:[{id:"km",label:"Kelelahan Mental",t:"Kondisi ketika kapasitas psikologis terkuras, misalnya setelah berinteraksi intens dengan murid yang beragam usia dan latar belakang. Tanda: mudah tersinggung, sulit fokus, kehilangan semangat."}]}
+   ]}
+ ]},
+ {group:"i",label:"Implementasi",kids:[
+  {id:"srl",label:"Self-Regulated Learning",sub:"Zimmerman",
+   t:"Siklus belajar mandiri yang berulang melalui tiga tahap: Perencanaan, Pemantauan, dan Refleksi. Pendidik menjalaninya untuk dirinya sendiri, lalu membimbing murid melakukannya.",
+   kids:[
+    {id:"pr",label:"Perencanaan",t:"Menganalisis tugas dan menetapkan target yang realistis sebelum belajar atau mengajar dimulai.",
+     ex:"\"Hari ini cukup satu kompetensi, dengan 20 menit pertama untuk kegiatan ringan.\""},
+    {id:"pm2",label:"Pemantauan",t:"Mengawasi apakah strategi berjalan, secara langsung di lingkungan belajar yang dinamis.",
+     ex:"Melihat banyak yang mulai lelah, lalu mengganti diskusi panjang dengan kerja kelompok."},
+    {id:"rf",label:"Refleksi",t:"Mengevaluasi secara mendalam efektivitas metode yang dipakai, lalu memperbaikinya untuk pertemuan berikutnya.",
+     ex:"Menulis catatan singkat: apa yang berhasil, apa yang diubah."}
+   ]}
+ ]},
+ {group:"h",label:"Hubungan untuk Belajar",kids:[
+  {id:"rl",label:"Hubungan untuk Belajar",sub:"Relationship to Learn",
+   t:"Fondasi rasa aman bagi murid untuk berani belajar mandiri. Hubungan yang harmonis dibangun dari sikap menghargai, mendengar, dan memanfaatkan potensi lokal yang dekat dengan kehidupan mereka."}
+ ]}
+]};
+
+var COLW=[170,150,190,170,170], GAPX=44, ROWH=80, NH=58, PAD=4;
+var map=document.getElementById("map"), panel=document.getElementById("panel");
+var seen={}, total=0, nodes=[], links=[], activeId=null;
+
+function layout(n,depth,grp,state){
+  n.depth=depth; n.grp=grp||n.group;
+  if(!n.kids||!n.kids.length){n.row=state.r++;}
+  else{n.kids.forEach(function(k){layout(k,depth+1,n.grp,state)});
+    n.row=(n.kids[0].row+n.kids[n.kids.length-1].row)/2;}
+  nodes.push(n);
+  (n.kids||[]).forEach(function(k){k.parent=n; links.push([n,k]);});
+}
+// root is depth 0; groups depth 1; concepts depth 2+
+layout(TREE,0,null,{r:0});
+nodes.forEach(function(n){if(n.id)total++;});
+var xs=[0]; for(var i=0;i<COLW.length;i++) xs.push(xs[i]+COLW[i]+GAPX);
+var W=xs[COLW.length]-GAPX, rows=nodes.filter(function(n){return !n.kids||!n.kids.length}).length, H=rows*ROWH-(ROWH-NH)+PAD*2;
+map.style.width=W+"px"; map.style.height=H+"px";
+
+var svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+svg.setAttribute("width",W); svg.setAttribute("height",H); map.appendChild(svg);
+
+function pos(n){return {x:xs[n.depth],y:PAD+n.row*ROWH,w:COLW[n.depth]}}
+links.forEach(function(l){
+  var a=pos(l[0]), b=pos(l[1]), x1=a.x+a.w, y1=a.y+NH/2, x2=b.x, y2=b.y+NH/2, mx=(x1+x2)/2;
+  var p=document.createElementNS("http://www.w3.org/2000/svg","path");
+  p.setAttribute("d","M"+x1+" "+y1+" C"+mx+" "+y1+" "+mx+" "+y2+" "+x2+" "+y2);
+  l[1].path=p; svg.appendChild(p);
+});
+
+nodes.forEach(function(n){
+  var p=pos(n), el=document.createElement(n.id?"button":"div");
+  el.className="node"+(n.root?" root":n.group?" group":"");
+  el.style.left=p.x+"px"; el.style.top=p.y+"px"; el.style.width=p.w+"px"; el.style.height=NH+"px";
+  if(n.grp){var c=G[n.grp].c; el.style.setProperty("--col","var(--"+c+")"); el.style.setProperty("--soft","var(--"+c+"s)");}
+  if(n.id){
+    el.type="button";
+    el.innerHTML='<span class="dot"></span><span></span>';
+    var s=el.lastChild; s.textContent=n.label;
+    if(n.sub){var sm=document.createElement("small"); sm.textContent=n.sub; s.appendChild(sm);}
+    el.addEventListener("click",function(){open(n)});
+    n.el=el;
+  }else{
+    el.textContent=n.label;
+    if(n.root) el.setAttribute("role","presentation");
+  }
+  map.appendChild(el);
+});
+
+function color(n){return G[n.grp].c}
+function open(n){
+  activeId=n.id; seen[n.id]=true;
+  nodes.forEach(function(m){
+    if(m.el) m.el.classList.toggle("active",m===n);
+    if(m.el&&seen[m.id]) m.el.classList.add("seen");
+    if(m.path){m.path.classList.remove("on");m.path.style.stroke="";}
+  });
+  for(var m=n;m&&m.path;m=m.parent){m.path.classList.add("on");m.path.style.stroke="var(--"+color(n)+")";}
+  var c=color(n);
+  panel.style.setProperty("--col","var(--"+c+")"); panel.style.setProperty("--soft","var(--"+c+"s)");
+  panel.innerHTML="";
+  var tag=document.createElement("div"); tag.className="tag"; tag.textContent=G[n.grp].n+(n.sub?" · "+n.sub:"");
+  var h=document.createElement("h2"); h.textContent=n.label;
+  var p=document.createElement("p"); p.textContent=n.t;
+  panel.append(tag,h,p);
+  if(n.ex){var e=document.createElement("div"); e.className="ex"; var b=document.createElement("b"); b.textContent="Contoh"; var s=document.createElement("span"); s.textContent=n.ex; e.append(b,s); panel.appendChild(e);}
+  var k=Object.keys(seen).length;
+  document.getElementById("pt").textContent=k+" dari "+total+" dibuka";
+  document.getElementById("pb").style.width=(k/total*100)+"%";
+}
+function intro(){
+  panel.style.removeProperty("--col"); panel.style.removeProperty("--soft");
+  panel.innerHTML='<div class="tag">Mulai</div><h2>Pilih satu konsep</h2><p class="hint">Mulailah dari Regulasi Diri di kolom Pondasi, lalu telusuri Implementasi dan Hubungan untuk Belajar. Titik di dalam kotak terisi setelah konsep dibuka.</p>';
+}
+intro();
+</script>
+
+</body></html>
